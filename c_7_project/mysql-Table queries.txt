@@ -1,0 +1,115 @@
+create database if not exists JukeBoxdb;
+use jukeboxdb;
+drop database jukeboxdb;
+create table Artist(artistid int primary key unique auto_increment, Aname varchar(20));
+
+drop table Artist;
+
+insert into Artist values(101,'Harry Styles');
+insert into Artist values(102,'A.R. Rehman');
+insert into Artist values(103,'Arjit Singh');
+select * from Artist;
+
+
+create table Album(albumid int primary key unique auto_increment, albumName varchar(20), releaseDate varchar(20));
+
+insert into Album values(201,'Fine line',2019);
+insert into Album values(202,'Rock Star',2011);
+insert into Album values(203,'Kabir Singh',2011);
+insert into Album values(204,'2 states',2012);
+
+select * from Album;
+drop table Album;
+
+
+create table genre(genereid int primary key unique auto_increment, typeName varchar(20));
+
+drop table genre;
+
+insert into genre(typeName) values('pop');
+insert into genre(typeName) values('Rock n roll');
+
+select *from genre;
+
+
+-- create table podCastEpisodes(episodeId int primary key auto_increment, episodeName varchar(20), podcastpath varchar(200),releaseDate date, podcastid int ,
+-- constraint podcastid foreign key(podcastid) references podcast(podcastid));
+
+-- insert into podCastEpisodes  values(901,'patliputra','Podcast/5.1_Carry_on_Pataliputra.wav','2019-01-14',201);
+-- insert into podCastEpisodes values(902,'hills','Podcast/5.2_The_lake_on_the_hills.wav','2019-02-14',201);
+-- insert into podCastEpisodes values(903,'Renown','Podcast/5.3_On_the_edge_of_renown.wav','2019-03-14',201);
+-- insert into podCastEpisodes values(904,'Mauryan','Podcast/5.4_Onward_Mauryan_empire1.wav','2019-04-14',201);
+
+select* from podCastEpisodes;
+drop table podCastEpisodes;
+
+
+create table user(userid int primary key not null unique auto_increment, uname varchar(20), email varchar(20) unique,password varchar(20));
+
+insert into user values(1100,'Dave','dave@gmail.com','daves1');
+insert into user values(1101,'Page','page@gmail.com','pages1');
+Select password from user where email = 'dave@gmail.com';
+
+select *from user;
+drop table user;
+
+
+
+create table song(songid int primary key unique auto_increment,sname varchar(20), duration varchar(20), filepath varchar(400), 
+artistid int not null, albumid int not null,
+constraint artistid foreign key(artistid) references Artist(artistid),
+constraint albumid foreign key(albumid) references Album(albumid));
+
+insert into song values(1,'adhi-adhi raat','5:00','songs/01-Adhi-Adhi-Raat-(Bilal-Saeed)-(Pagalworld.Com).wav',103,204);
+insert into song values(2,'Bekhayali','6:10','songs/03 - Bekhayali (Arijit Singh) - Kabir Singh (2019) (1) (1).wav',103,203);
+insert into song values(3,'Mast Magan','5:00','songs/03_-_Mast_Magan(wapking.cc) (1).wav',103,204);
+
+
+Select (filepath) from song where songid = 2;
+
+
+
+select * from song;
+drop table song;
+
+
+
+create table podcast(podcastid int primary key auto_increment, pname varchar(20), releaseDate date, 
+podcaster_Name varchar(20),filepath varchar(50));
+
+-- insert into podcast values(201,'The history of India','2019-01-14','Kit Patrn','C:\Users\SID\Desktop\full stack\New folder\Course 7');
+insert into podcast  values(901,'patliputra','2019-01-14','Neil kate','Podcast/5.1_Carry_on_Pataliputra.wav');
+insert into podcast values(902,'hills','2019-02-14','Neil kate','Podcast/5.2_The_lake_on_the_hills.wav');
+insert into podcast values(903,'Renown','2019-03-14','Neil kate','Podcast/5.3_On_the_edge_of_renown.wav');
+insert into podcast values(904,'Mauryan','2019-04-14','Neil kate','Podcast/5.4_Onward_Mauryan_empire1.wav');
+
+
+drop table podcast;
+select* from podcast;
+
+
+create table playlist(playlistid int primary key auto_increment, plname varchar(20),createdon date, email varchar(20) not null,
+constraint fkemail foreign key(email) references user(email));
+
+
+drop table playlist;
+select *from playlist;
+
+
+create table playlistsongDetails(sdetailsid int primary key auto_increment, playlistid int not null,songid int,email varchar(20) not null,
+constraint fkplaylistid foreign key(playlistid) references playlist(playlistid),
+constraint fksongid foreign key(songid) references song(songid),
+constraint fkuemail foreign key(email) references user(email));
+
+
+drop table playlistsongDetails;
+select * from playlistsongDetails;
+
+ create table playlistpodcastdetails(pddetailsid int primary key auto_increment, playlist_id int,podcastid int,email varchar(40),
+ constraint playlistidcontraint foreign key(playlist_id) references playlist(playlistid),
+ constraint podcastidconstraint foreign key(podcastid) references podcast(podcastid),
+constraint uemail foreign key(email) references user(email));
+
+drop table playlistpodcastdetails;
+select *from playlistpodcastdetails;
+
